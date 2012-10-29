@@ -76,15 +76,27 @@ Their constructor sets up the options, `initialize` draws the map, and `drawPoin
 
 ## Providers
 
-[Leaflet](http://leafletjs.com) (using MapQuest tiles) as `Mapsheet.Providers.Leaflet` (default)
+[Google Maps](https://developers.google.com/maps/) as `Mapsheet.Providers.Google` (default)
 
-[Google Maps](https://developers.google.com/maps/) as `Mapsheet.Providers.Google`
+[Leaflet](http://leafletjs.com) (using MapQuest tiles) as `Mapsheet.Providers.Leaflet` (be sure to include the CSS)
 
 [MapBox](http://mapbox.com) as `Mapsheet.Providers.MapBox`
 
 [MapQuest](http://developer.mapquest.com/web/products/open) as `Mapsheet.Providers.MapQuest`
 
 # Customizing Your Map
+
+## Styling info windows
+
+All of the info boxes live inside of a `<div class='mapsheet-popup'></div>`, so feel free to apply styles to `.mapsheet-popup h3`, etc
+
+## Customizing the map itself (roads, water, etc)
+
+You'll need to pick a provider that allows map customization
+
+[CloudMade](http://www.cloudmade.com) has a billion styles over at their [map style editor](http://maps.cloudmade.com/editor), you'll just have to check out the `cloudmade.html` example. You need an API key, but it ain't tough beyond that.
+
+[MapBox](http://www.mapbox.com) could also work for you, especially if you have a lot of stuff going on.
 
 ## Custom Markers
 

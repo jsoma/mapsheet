@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html>
   <body>
-
-			<!--
-
-				This example uses:
-					MapBox
-					pre-compiled Handlebars template for popup
-
-			-->
-			
+		<!--
+		
+			This example uses:
+				Google Maps
+				Handlebars templates for the popups
+				Custom colors from the spreadsheet for the markers
+		
+		-->
+		
     <div id="map" style="height: 500px; width: 600px"></div>
 
     <script type="text/javascript" src="common/tabletop.js"></script>
     <script type="text/javascript" src="common/handlebars.js"></script>
-	  <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
-	  <link href='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.css' rel='stylesheet' />
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
     <script type="text/javascript" src="../src/mapsheet.js"></script>
 
     <script id="popup-template" type="text/x-handlebars-template">
 			<h3>{{town}}</h3>
-			<p>Coordinates: {{lat}}, {{long}}</p>
 			<p>{{streetaddress}}</p>
     </script>
 
@@ -31,14 +29,14 @@
       var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0AtG9_k99Q_n6dE54Vl83elpDNm9CQmxQRW5KTVZqWUE&output=html';
 			
       function init() {
-				var source = document.getElementById("popup-template").innerHTML;
-				var template = Handlebars.compile(source);
-				
+        var source   = document.getElementById("popup-template").innerHTML;
+        var template = Handlebars.compile(source);
+
         Mapsheet( { key: public_spreadsheet_url,
 											element: "map",
-											provider: Mapsheet.Providers.MapBox,
+											provider: Mapsheet.Providers.Google,
 											popupTemplate: template
-				});
+									} );
       }
 
       document.write("The published spreadsheet is located at <a target='_new' href='" + public_spreadsheet_url + "'>" + public_spreadsheet_url + "</a>");        

@@ -17,7 +17,7 @@
     this.key = options.key;
     this.element = options.element;
 		this.sheetName = options.sheetName;
-		this.provider = options.provider || Mapsheet.Providers.Leaflet;
+		this.provider = options.provider || Mapsheet.Providers.Google;
 		this.renderer = new this.provider( { map: options.map, mapOptions: options.mapOptions } );
 		this.fields = options.fields;
 		this.titleColumn = options.titleColumn;
@@ -109,22 +109,22 @@
 		},
 		
 		content: function() {
+			var html = "";
 			if(typeof(this.popupContent) !== 'undefined') {
-				return this.popupContent.call(this, this.model);
+				html = this.popupContent.call(this, this.model);
 			} else if(typeof(this.popupTemplate) !== 'undefined') {
-				return this.popupTemplate.call(this, this.model);
+				html = this.popupTemplate.call(this, this.model);
 			} else if(typeof(this.fields) !== 'undefined') {
-				var html = "";
 				if(typeof(this.title()) !== 'undefined' && this.title() !== '') {
 					html += "<h3>" + this.title() + "</h3>";
 				}
 				for(var i = 0; i < this.fields.length; i++) {
 					html += "<p><strong>" + this.fields[i] + "</strong>: " + this.get(this.fields[i]) + "</p>";
 				}
-				return html;
 			} else {
 				return '';
 			}
+			return "<div class='mapsheet-popup'>" + html + "</div>"
 		}
   };
 	

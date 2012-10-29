@@ -8,6 +8,16 @@
 	</head>
   <body>
 
+				<!--
+
+					This example uses:
+						Leaflet
+						Custom icons from spreadsheet
+						markerOptions to set the icons in the right places
+						Handlebars templating for popups
+
+				-->
+
     <div id="map" style="height: 500px; width: 600px"></div>
 
     <script type="text/javascript" src="common/tabletop.js"></script>
@@ -17,10 +27,11 @@
     <script type="text/javascript" src="../src/mapsheet.js"></script>
 
     <script id="popup-template" type="text/x-handlebars-template">
-			<h3><a href='{{link}}'>{{name}}</a></h3>
-			<p>Est. {{established}}, {{borough}}</p>
+			<h3><a href='{{link}}' target='_blank'>{{name}}</a></h3>
+			<p>{{borough}}</p>
 			<p>{{streetaddress}}</p>
 			<p>{{type}}</p>
+			<p><a href='{{link}}' target='_blank'>{{link}}</a></p>
     </script>
 
     <script type="text/javascript">

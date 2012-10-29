@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html>
   <body>
+	
+		<!--
+		
+			This example uses:
+				Google Maps
+				titleColumn & fields parameters to put content in popups
+				custom default icon
+		
+		-->
+	
 
     <div id="map" style="height: 500px; width: 600px"></div>
 
     <script type="text/javascript" src="common/tabletop.js"></script>
-    <script type="text/javascript" src="common/handlebars.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
     <script type="text/javascript" src="../src/mapsheet.js"></script>
@@ -13,13 +22,13 @@
     <script type="text/javascript">
     	window.onload = function() { init() };
 
-      var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0AtG9_k99Q_n6dFJsV3drNldsRnZxN1dLX1ljbDVDZHc&output=html';
+      var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0AtG9_k99Q_n6dGRTMzVtNmdoclNHdXVfRWl6YkFoclE&output=html';
 			
       function init() {
         Mapsheet( { key: public_spreadsheet_url,
 											element: "map",
-											titleColumn: "name",
-											fields: [ "borough", "Link" ],
+											titleColumn: "town",
+											fields: [ "Lat", "Street Address" ],
 											provider: Mapsheet.Providers.Google,
 											markerOptions: {
 												iconUrl: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=2|EF75FE'
