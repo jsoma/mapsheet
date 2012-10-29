@@ -116,6 +116,20 @@ If you're unsure of what hex colors are, pop on over to [http://www.colorpicker.
 
 When you customize your icons using Leaflet, you'll probably want to pass some `markerOptions` as well to make sure everything lines up nicely. `markerOptions: { iconSize: [32, 37], iconAnchor: [16, 37] }` works for the icons from the [Map Icons Collection](http://mapicons.nicolasmollet.com). [Read more on the Leaflet site](http://leafletjs.com/examples/custom-icons.html).
 
+### Using other Leaflet tile providers
+
+Leaflet defaults to serving tiles from MapQuest, because it's free, and doesn't require an API key. If you'd like to use [CloudMade](http://www.cloudmade.com) or something instead, you'll need to make some changes. You'll need to pass in a mapOptions along the lines of the following
+
+		mapOptions: {
+			subdomains: 'abc',
+			tilePath: 'http://{s}.tile.cloudmade.com/{apikey}/{styleId}/256/{z}/{x}/{y}.png',
+			styleId: 1930,
+			apikey: 'Your CloudMade API Key',
+			attribution: 'An appropriate credit line without MapQuest'
+		}
+
+And then you should be all set!
+
 # Examples
 
 There are a lot of examples in `/examples`, check them out!

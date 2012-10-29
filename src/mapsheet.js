@@ -338,6 +338,7 @@
 			subdomains: '1234',
 			type: 'osm',
 			tilePath: 'http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.png',
+			styleId: 998,
 			attribution: attribution
 		};
 
