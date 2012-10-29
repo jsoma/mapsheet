@@ -131,3 +131,5 @@ Fix up the docs to actually be nice and pleasant
 Don't show popups if there's no content in the popup
 
 Replace the sample map with some quality, dedicated sample maps
+
+Callbacks callbacks everywhere

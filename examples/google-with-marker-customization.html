@@ -18,7 +18,8 @@
       function init() {
         Mapsheet( { key: public_spreadsheet_url,
 											element: "map",
-											popupTemplate: "popup-template",
+											titleColumn: "name",
+											fields: [ "borough", "Link" ],
 											provider: Mapsheet.Providers.Google,
 											markerOptions: {
 												iconUrl: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=2|EF75FE'
