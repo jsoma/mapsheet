@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="map" style="height: 500px; width: 600px"></div>
+
+    <script type="text/javascript" src="common/tabletop.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+    <script type="text/javascript" src="../src/mapsheet.js"></script>
+
+    <script type="text/javascript">
+    	window.onload = function() { init() };
+
+      var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0AtG9_k99Q_n6dFJsV3drNldsRnZxN1dLX1ljbDVDZHc&output=html';
+			
+			// Using 'fields' and 'titleColumn' lets you not code any HTML at all
+
+      function init() {
+        Mapsheet( { key: public_spreadsheet_url,
+											element: "map",
+											titleColumn: "name",
+											provider: Mapsheet.Providers.Google,
+											fields: [ "Borough", "Type", "Address", "Link" ]
+									} );
+      }
+
+      document.write("The published spreadsheet is located at <a target='_new' href='" + public_spreadsheet_url + "'>" + public_spreadsheet_url + "</a>");        
+    </script>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.css" />
+	 <!--[if lte IE 8]>
+	     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />
+	 <![endif]-->
+	</head>
+  <body>
+
+    <div id="map" style="height: 500px; width: 600px"></div>
+
+    <script type="text/javascript" src="common/tabletop.js"></script>
+    <script type="text/javascript" src="common/handlebars.js"></script>
+		<script src="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
+
+    <script type="text/javascript" src="../src/mapsheet.js"></script>
+
+    <script id="popup-template" type="text/x-handlebars-template">
+			<h3><a href='{{link}}'>{{name}}</a></h3>
+			<p>Est. {{established}}, {{borough}}</p>
+			<p>{{streetaddress}}</p>
+			<p>{{type}}</p>
+    </script>
+
+    <script type="text/javascript">
+    	window.onload = function() { init() };
+
+      var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0AtG9_k99Q_n6dFJsV3drNldsRnZxN1dLX1ljbDVDZHc&output=html';
+			
+      function init() {
+        Mapsheet( { key: public_spreadsheet_url,
+											element: "map",
+											popupTemplate: "popup-template",
+											provider: Mapsheet.Providers.Leaflet,
+											markerOptions: {
+												iconUrl: 'http://leafletjs.com/docs/images/leaf-green.png',
+										    shadowUrl: 'http://leafletjs.com/docs/images/leaf-shadow.png',
+
+										    shadowSize:   [50, 64], // size of the shadow
+										    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+										    shadowAnchor: [4, 62],  // the same for the shadow
+										    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+											}
+									} );
+      }
+
+      document.write("The published spreadsheet is located at <a target='_new' href='" + public_spreadsheet_url + "'>" + public_spreadsheet_url + "</a>");        
+    </script>
+  </body>
+</html>

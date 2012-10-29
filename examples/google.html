@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <body>
+
+    <div id="map" style="height: 500px; width: 600px"></div>
+
+    <script type="text/javascript" src="common/tabletop.js"></script>
+    <script type="text/javascript" src="common/handlebars.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+    <script type="text/javascript" src="../src/mapsheet.js"></script>
+
+    <script id="popup-template" type="text/x-handlebars-template">
+			<h3><a href='{{link}}'>{{name}}</a></h3>
+			<p>Est. {{established}}, {{borough}}</p>
+			<p>{{streetaddress}}</p>
+			<p>{{type}}</p>
+    </script>
+
+    <script type="text/javascript">
+    	window.onload = function() { init() };
+
+      var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0AtG9_k99Q_n6dFJsV3drNldsRnZxN1dLX1ljbDVDZHc&output=html';
+			
+      function init() {
+        var source   = document.getElementById("popup-template").innerHTML;
+        var template = Handlebars.compile(source);
+
+        Mapsheet( { key: public_spreadsheet_url,
+											element: "map",
+											titleColumn: 'name',
+											provider: Mapsheet.Providers.Google,
+											popupTemplate: template
+									} );
+      }
+
+      document.write("The published spreadsheet is located at <a target='_new' href='" + public_spreadsheet_url + "'>" + public_spreadsheet_url + "</a>");        
+    </script>
+  </body>
+</html>
