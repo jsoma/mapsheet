@@ -102,8 +102,6 @@ Custom markers are supported for Google Maps, Leaflet, and MapBox (to varying de
 
 **Custom icon + shadows:** Check the `examples/leaflet-with-marker-customization.html` example, it's complicated.
 
-*Note: If you're unsure of what hex colors are, pop on over to http://www.colorpicker.com or [Wikipedia](http://en.wikipedia.org/wiki/Web_colors#X11_color_names) - they're just strings of numbers/letters like FF36A2 that end up as colors.*
-
 ### Provider support
 
 **Google Maps:** custom colors, custom icons, custom default icon
@@ -111,6 +109,12 @@ Custom markers are supported for Google Maps, Leaflet, and MapBox (to varying de
 **MapBox:** custom icons
 
 **Leaflet:** custom icons, custom icons + shadows, custom default icon
+
+### General notes on using colored/custom icons
+
+If you're unsure of what hex colors are, pop on over to [http://www.colorpicker.com](http://www.colorpicker.com) or [Wikipedia](http://en.wikipedia.org/wiki/Web_colors#X11_color_names) - they're just strings of numbers/letters like FF36A2 that end up as colors.*
+
+When you customize your icons using Leaflet, you'll probably want to pass some `markerOptions` as well to make sure everything lines up nicely. `markerOptions: { iconSize: [32, 37], iconAnchor: [16, 37] }` works for the icons from the [Map Icons Collection](http://mapicons.nicolasmollet.com). [Read more on the Leaflet site](http://leafletjs.com/examples/custom-icons.html).
 
 # Examples
 
@@ -120,9 +124,9 @@ If you're looking for the least complicated one, check out `fields.html`. It isn
 
 # Etc
 
-## Who am I?
+## Credits
 
-Hi, I'm [J Soma](http://twitter.com/dangerscarf). I run the [Brooklyn Brainery](http://brooklynbrainery.com), and make all sorts of nonsense.
+Hi, I'm [Jonathan Soma](http://twitter.com/dangerscarf). I run the [Brooklyn Brainery](http://brooklynbrainery.com), and make all sorts of nonsense.
 
 ## Todo
 
@@ -133,3 +137,5 @@ Don't show popups if there's no content in the popup
 Replace the sample map with some quality, dedicated sample maps
 
 Callbacks callbacks everywhere
+
+Notes about styling your infoboxes

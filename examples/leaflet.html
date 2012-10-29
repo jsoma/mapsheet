@@ -32,7 +32,11 @@
         Mapsheet( { key: public_spreadsheet_url,
 											element: "map",
 											popupTemplate: "popup-template",
-											provider: Mapsheet.Providers.Leaflet
+											provider: Mapsheet.Providers.Leaflet,
+											markerOptions: {
+										    iconSize:   [32, 37], 
+										    iconAnchor:   [16, 37],
+											}
 				});
       }
 
