@@ -78,7 +78,7 @@ Their constructor sets up the options, `initialize` draws the map, and `drawPoin
 
 [Google Maps](https://developers.google.com/maps/) as `Mapsheet.Providers.Google` (default)
 
-[Leaflet](http://leafletjs.com) (using MapQuest tiles) as `Mapsheet.Providers.Leaflet` (be sure to include the CSS)
+[Leaflet](http://leafletjs.com) (using MapQuest tiles by default, but supports CloudMade, etc) as `Mapsheet.Providers.Leaflet` (be sure to include the CSS)
 
 [MapBox](http://mapbox.com) as `Mapsheet.Providers.MapBox`
 
