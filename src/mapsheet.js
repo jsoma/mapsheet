@@ -3,14 +3,15 @@
   
 	function merge_options(obj1, obj2) {
 	    var obj3 = {};
-	    for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
-	    for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+	    var attrname;
+	    for (attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+	    for (attrname in obj2) { obj3[attrname] = obj2[attrname]; }
 	    return obj3;
 	}
 
   var Mapsheet = global.Mapsheet = function(options) {
     // Make sure Mapsheet is being used as a constructor no matter what.
-    if(!this || this === global) {
+    if(!this || !(this instanceof Mapsheet)) {
       return new Mapsheet(options);
     }
 

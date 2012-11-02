@@ -26,7 +26,7 @@
 
   var Tabletop = global.Tabletop = function(options) {
     // Make sure Tabletop is being used as a constructor no matter what.
-    if(!this || this === global) {
+    if(!this || !(this instanceof Tabletop)) {
       return new Tabletop(options);
     }
 
@@ -43,7 +43,7 @@
     this.postProcess = options.postProcess;
     this.debug = !!options.debug;
     this.query = options.query || '';
-	this.callbackContext = options.callbackContext;
+		this.callbackContext = options.callbackContext;
 
     /* Be friendly about what you accept */
     if(/key=/.test(this.key)) {
