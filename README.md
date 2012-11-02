@@ -4,7 +4,7 @@
 
 *Optional:* Mapsheet supports [Handlebars](http://handlebarsjs.com) for info window templates.
 
-**NOTE: Mapsheet isn't done yet, so relax! I just wanted to push it up to share with some folks, give me a few days and we'll be set.**
+**NOTE: Mapsheet is still under heavy development (if you can call it that).**
 
 ## So how do I do this?
 
