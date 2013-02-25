@@ -16,17 +16,21 @@
     }
 
     this.key = options.key;
+    this.passedMap = options.map;
     this.element = options.element;
 		this.sheetName = options.sheetName;
 		this.provider = options.provider || Mapsheet.Providers.Google;
-		this.renderer = new this.provider( { map: options.map, mapOptions: options.mapOptions } );
+		this.renderer = new this.provider( { map: options.passedMap, mapOptions: options.mapOptions } );
 		this.fields = options.fields;
 		this.titleColumn = options.titleColumn;
 		this.popupContent = options.popupContent;
 		this.popupTemplate = options.popupTemplate;
+		this.callbackContext = options.callbackContext;
+		this.callback = options.callback;
+		
 		if(typeof(this.popupTemplate) === 'string') {
-      var source   = document.getElementById(this.popupTemplate).innerHTML;
-      this.popupTemplate = Handlebars.compile(source);
+				var source   = document.getElementById(this.popupTemplate).innerHTML;
+				this.popupTemplate = Handlebars.compile(source);
 		}
 		this.markerOptions = options.markerOptions || {};
 
@@ -57,10 +61,11 @@
 			this.draw();
     },
 
-		draw: function() {
-			this.renderer.initialize(this.element);
-			this.renderer.drawPoints(this.points);
-		},
+    draw: function() {
+      this.renderer.initialize(this.element);
+      this.renderer.drawPoints(this.points);
+      this.callback.apply(this.callbackContext || this, [this, this.tabletop]);
+    },
 	
     log: function(msg) {
       if(this.debug) {
@@ -68,6 +73,10 @@
           Function.prototype.apply.apply(console.log, [console, arguments]);
         }
       }
+    },
+    
+    map: function() {
+      return (this.passedMap || this.renderer.map);
     }
 
   };
@@ -152,7 +161,7 @@
 	Mapsheet.Providers.Google.prototype = {
 		initialize: function(element) {
 			if(typeof(this.map) === 'undefined') {
-	      this.map = new google.maps.Map(element, this.mapOptions);
+				this.map = new google.maps.Map(element, this.mapOptions);
 			}
 			this.bounds = new google.maps.LatLngBounds();
 			this.infowindow = new google.maps.InfoWindow({ content: "loading...", maxWidth: '300' });
@@ -214,11 +223,43 @@
 		
 		initInfoWindow: function(marker) {
 			var infowindow = this.infowindow;
+			var clickedOpen = false;
+			
+			// All of the extra blah blahs are for making sure to not repopulate
+			// the infowindow when it's already opened and populated with the 
+			// right content
 			
       google.maps.event.addListener(marker, 'click', function() {
+				if(infowindow.getAnchor() === marker && infowindow.opened) {
+					return;
+				}
 				infowindow.setContent(this.point.content());
 				infowindow.open(this.map, this);
+				clickedOpen = true;
+				infowindow.opened = true;
       });
+
+			// 'eh, general consensus is that hover popups are terrible. 
+			// Taking it out for now.
+			// 
+			// google.maps.event.addListener(marker, 'mouseover', function() {
+			// 	if(infowindow.getAnchor() !== marker) {
+			// 		clickedOpen = false;
+			// 	} else if(infowindow.opened === true) {
+			// 		return;
+			// 	}
+			// 	infowindow.setContent(this.point.content());
+			// 	infowindow.open(map, this);
+			// 	infowindow.opened = true;
+			// });
+			// 
+			// google.maps.event.addListener(marker, 'mouseout', function() {
+			// 	if(!clickedOpen) {
+			// 		infowindow.close();
+			// 		infowindow.opened = false;
+			// 	}
+			// });
+
 		},
 		
 		drawPoints: function(points) {
@@ -227,6 +268,7 @@
 				var marker = this.drawMarker(points[i]);
 				marker.setMap(this.map);
 				this.bounds.extend(marker.position);
+				points[i].marker = marker;
 			};
 			this.map.fitBounds(this.bounds);
 		}
@@ -357,7 +399,7 @@
 		
 		drawMarker: function(point) {
 			var marker = L.marker(point.coords())
-				.bindPopup(point.content());
+				.bindPopup(point.content())
 			
 			if(typeof(point.get('icon url')) !== 'undefined' && point.get('icon url') !== '') {
 				var options = merge_options( point.markerOptions, { iconUrl: point.get('icon url') } );

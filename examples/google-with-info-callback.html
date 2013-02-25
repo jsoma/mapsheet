@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <body>
+		<!--
+		
+			This example uses:
+				Google Maps
+				Handlebars templates for the popups
+		
+		-->
+		
+    <div id="map" style="height: 500px; width: 600px"></div>
+
+    <script type="text/javascript" src="common/tabletop.js"></script>
+    <script type="text/javascript" src="common/handlebars.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+    <script type="text/javascript" src="../src/mapsheet.js"></script>
+
+    <script id="popup-template" type="text/x-handlebars-template">
+			<h3>{{town}}</h3>
+			<p>{{streetaddress}}</p>
+    </script>
+
+    <script type="text/javascript">
+    	window.onload = function() { init() };
+
+      var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0AtG9_k99Q_n6dGRTMzVtNmdoclNHdXVfRWl6YkFoclE&output=html';
+			
+      function init() {
+        var source   = document.getElementById("popup-template").innerHTML;
+        var template = Handlebars.compile(source);
+
+        Mapsheet( { key: public_spreadsheet_url,
+											element: "map",
+											provider: Mapsheet.Providers.Google,
+											popupTemplate: template,
+											// Use callback to access the data, maybe build
+											// a chart or whatnot
+											callback: function(mapsheet, tabletop) {
+											  for(var i=0; i < mapsheet.points.length; i++) {
+                          console.log(mapsheet.points[i].get('town'));
+											  }
+											}
+									} );
+      }
+
+      document.write("The published spreadsheet is located at <a target='_new' href='" + public_spreadsheet_url + "'>" + public_spreadsheet_url + "</a>");        
+    </script>
+  </body>
+</html>

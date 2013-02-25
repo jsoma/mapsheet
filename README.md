@@ -25,6 +25,8 @@ and as long as you have a `<div id="map"></div>` somewhere you'll be good to go.
 
 ### Mapsheet itself
 
+#### Initialization options
+
 When you initialize Mapsheet you have plenty of options to pick through. `key` and `element` are the only two required parameters, though!
 
 `key` is the URL to the *published* Google Spreadsheet you're dealing with.
@@ -32,6 +34,8 @@ When you initialize Mapsheet you have plenty of options to pick through. `key` a
 `element` is the id of the element that's going to become the map. You can also pass in an element.
 
 `fields` is an array of columns to display in the info window if you don't feel like using a template. Check the examples!
+
+`map` is the map, if you feel like rendering it without using a Mapsheet provider.
 
 `popupContent` is a function that returns content for the info window popup. It's passed the Tabletop model for the given row. It overrides both `fields` and `popupTemplate`.
 
@@ -46,11 +50,21 @@ When you initialize Mapsheet you have plenty of options to pick through. `key` a
 
 `markerOptions` are passed through to the marker, and are used for things like specifying marker shadows and other very-specific-to-the-provider details.
 
-`map` is the map, if you feel like rendering it without using a Mapsheet provider.
-
 `titleColumn` is the column that you'd like to use as the title of the point (e.g., the name of the place). This is only important if using `fields`, or if you want hover effects for MapQuest or Google.
 
+`callback` is the callback for when the map has been successfully drawn. It will be passed two objects: the mapsheet object and the tabletop object. See [the Tabletop.js](http://github.com/jsoma/tabletop) docs if you'd like more info on that part.
+
+`callbackContext` provides the context of the callback, if necessary.
+
+#### Methods/Properties
+
+`.map()` is the rendered map
+
+`.points` is an array of Mapsheet.Marker objects
+
 ### Mapsheet.Marker
+
+#### Methods/Properties
 
 `.model` is the Tabletop model of the row the marker is associated with
 
@@ -67,6 +81,8 @@ When you initialize Mapsheet you have plenty of options to pick through. `key` a
 `.content()` uses `popupContent`, `popupTemplate`, or `titleColumn` and `fields` to create content for the info window popup
 
 `.isValid()` returns true if latitude() and longitude() both return valid floats
+
+`.marker` returns the raw marker (from Google or MapQuest etc)
 
 ### Mapsheet.Provider.Whatever
 
