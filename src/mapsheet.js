@@ -391,7 +391,8 @@
 		
 		var layerDefaults = {
 			styleId: 998,
-			attribution: attribution
+			attribution: attribution,
+			type: 'osm'
 		};
 
 		this.layerOptions = merge_options(layerDefaults, options.layerOptions || {});
