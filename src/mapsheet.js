@@ -390,12 +390,18 @@
 		var attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, tiles &copy; <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png" />';
 		
 		var layerDefaults = {
-			tilePath: 'http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.png',
 			styleId: 998,
 			attribution: attribution
 		};
 
 		this.layerOptions = merge_options(layerDefaults, options.layerOptions || {});
+
+    // Only overwrite if there's no tilePath, because the default subdomains is 'abc'
+    if(!this.layerOptions.tilePath) {
+      this.layerOptions.tilePath = 'http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.png';
+      this.layerOptions.subdomains = '1234';
+      this.layerOptions.type = 'osm';
+    }
     this.markerLayer = options.markerLayer || new L.LayerGroup();
 		this.mapOptions = options.mapOptions || {};
 		this.bounds = new L.LatLngBounds();
@@ -405,13 +411,6 @@
 		initialize: function(element) {
 			if(typeof(this.map) === 'undefined') {
 				this.map = new L.Map('map', this.mapOptions);
-				console.log(this.layerOptions);
-				console.log({
-          attribution: 'Jolie McCullough, Albuquerque Journal | Imagery &copy; 2011 CloudMade',
-          key: '09cb1b5940994a2695239c8c775524ef',
-          styleId: 106670,
-          maxZoom: 18
-         });
 				this.tileLayer = new L.TileLayer(this.layerOptions['tilePath'], this.layerOptions).addTo(this.map);
 			}
 		},

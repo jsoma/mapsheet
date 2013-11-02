@@ -2,6 +2,14 @@
 <html lang="en">
 <head prefix="og: http://wcfcourier.com/app/special/tabletop_to_leaflet/index_cluster.html">
 <head>
+  <!--
+  
+    Temporary example taken from Jolie McCullough's awesome work over at http://www.abqjournal.com/maps/breakingbad.html
+    Uses Leaflet with a Cloudmade base layer
+    Clusters markers by passing in a markerLayer
+    Custom attributes, etc, for layer
+  
+  -->
 	<title>Interactive Map: 'Bad' on location</title>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
@@ -45,6 +53,7 @@
 		</div>
 
 		<div class="sidebar_content">
+		  <p>Lives in real life over at <a href="http://www.abqjournal.com/maps/breakingbad.html">http://www.abqjournal.com/maps/breakingbad.html</a>, where <a herf="https://twitter.com/jsmccullou">Jolie McCullough</a> built it with <a href="https://github.com/jsoma/tabletop">Tabletop.js</a> and an iron will.</p>
 			<p>This interactive map shows areas in and around Albuqerque where "Breaking Bad" was filmed.</p>
 			<p>Click on a marker to see what scene took place there. Zoom out to see places that were in the show outside of Albuquerque.</p>
 			<p>The clusters (green circles) show how many markers are within that area. Click on one a cluster to zoom in on the markers in that area.</p>
@@ -90,6 +99,7 @@
                    tilePath: 'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png',
                    styleId: 106670,
                    key: '09cb1b5940994a2695239c8c775524ef',
+                   attribution: 'Jolie McCullough, Albuquerque Journal | Imagery &copy; 2011 CloudMade',
                    maxZoom: 18
                 },
                 mapOptions: {

@@ -60,7 +60,7 @@ When you initialize Mapsheet you have plenty of options to pick through. `key` a
 
 `markerLayer` is the layer that you'd like to render your markers on **(not supported by Google)**
 
-`layerOptions` are options passed passed to the marker layer, e.g. you want a cool Cloudmade backdrop **(Leaflet only)**
+`layerOptions` are options passed passed to the marker layer if you want a custom backing map, or specify attribution, etc **(Leaflet only)**
 
 #### Methods/Properties
 
