@@ -28,6 +28,12 @@
 		this.callbackContext = options.callbackContext;
 		this.callback = options.callback;
 		
+		// Let's automatically engage simpleSheet mode,
+		// which allows for easier using of data later on
+		// if you have multiple sheets, you'll want to
+		// disable this
+		var simpleSheet = true;
+		
 		if(typeof(this.popupTemplate) === 'string') {
 				var source   = document.getElementById(this.popupTemplate).innerHTML;
 				this.popupTemplate = Handlebars.compile(source);
@@ -38,7 +44,7 @@
 			this.element = document.getElementById(this.element);
 		};
 
-		this.tabletop = new Tabletop( { key: this.key, callback: this.loadPoints, callbackContext: this } );
+		this.tabletop = new Tabletop( { key: this.key, callback: this.loadPoints, callbackContext: this, simpleSheet: simpleSheet } );
   };
 
 
