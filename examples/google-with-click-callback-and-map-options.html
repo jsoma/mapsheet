@@ -38,6 +38,10 @@
 											element: "map",
 											provider: Mapsheet.Providers.Google,
 											popupTemplate: template,
+											mapOptions: {
+											  zoom: 4,
+											  center: [40.77, -73.98]
+											},
 											click: function(e, point) {
                         mapsheet.map().setCenter(this.getPosition());
                         mapsheet.map().setZoom(11);

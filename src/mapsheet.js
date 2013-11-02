@@ -21,7 +21,7 @@
     this.element = options.element;
 		this.sheetName = options.sheetName;
 		this.provider = options.provider || Mapsheet.Providers.Google;
-		this.renderer = new this.provider( { map: options.passedMap, mapOptions: options.mapOptions } );
+		this.renderer = new this.provider( { map: options.passedMap, mapOptions: options.mapOptions, layerOptions: options.layerOptions, markerLayer: options.markerLayer } );
 		this.fields = options.fields;
 		this.titleColumn = options.titleColumn;
 		this.popupContent = options.popupContent;
@@ -166,6 +166,10 @@
 	Mapsheet.Providers.Google = function(options) {
 		this.map = options.map;
 		this.mapOptions = merge_options( { mapTypeId: google.maps.MapTypeId.ROADMAP }, options.mapOptions || {} );
+		// We'll be nice and allow center to be a lat/lng array instead of a Google Maps LatLng
+		if(this.mapOptions.center && this.mapOptions.center.length == 2) {
+		  this.mapOptions.center = new google.maps.LatLng(this.mapOptions.center[0], this.mapOptions.center[1]);
+		}
 	};
 
 	Mapsheet.Providers.Google.prototype = {
@@ -255,27 +259,6 @@
 				infowindow.opened = true;
       });
 
-			// 'eh, general consensus is that hover popups are terrible. 
-			// Taking it out for now.
-			// 
-			// google.maps.event.addListener(marker, 'mouseover', function() {
-			// 	if(infowindow.getAnchor() !== marker) {
-			// 		clickedOpen = false;
-			// 	} else if(infowindow.opened === true) {
-			// 		return;
-			// 	}
-			// 	infowindow.setContent(this.point.content());
-			// 	infowindow.open(map, this);
-			// 	infowindow.opened = true;
-			// });
-			// 
-			// google.maps.event.addListener(marker, 'mouseout', function() {
-			// 	if(!clickedOpen) {
-			// 		infowindow.close();
-			// 		infowindow.opened = false;
-			// 	}
-			// });
-
 		},
 		
 		drawPoints: function(points) {
@@ -348,13 +331,14 @@
 	Mapsheet.Providers.MapBox = function(options) {
 		this.map = options.map;
 		this.mapOptions = merge_options({ mapId: 'examples.map-vyofok3q'}, options.mapOptions || {});
+		this.markerLayer = options.markerLayer || mapbox.markers.layer();
 	};
 
 	Mapsheet.Providers.MapBox.prototype = {
 		initialize: function(element) {
 			if(typeof(this.map) === 'undefined') {
 				this.map = mapbox.map( element );
-				this.map.addLayer(mapbox.layer().id(this.mapOptions['mapId']));
+				this.map.addLayer(mapbox.layer().id(this.mapOptions['mapId'])); // add the base layer
 		    this.map.ui.zoomer.add();
 		    this.map.ui.zoombox.add();
 			}
@@ -378,9 +362,7 @@
 		},
 
 		drawPoints: function(points) {
-		  this.markerLayer = mapbox.markers.layer();
-		  mapbox.markers.interaction(this.markerLayer);
-		  this.map.addLayer(this.markerLayer);
+      mapbox.markers.interaction(this.markerLayer);
 
 		  this.map.zoom(5).center({ lat: 37, lon: -77 });
 
@@ -390,6 +372,7 @@
 				this.markerLayer.add_feature(marker);
 				points[i].marker = marker;
 			};
+		  this.map.addLayer(this.markerLayer);
 			this.map.setExtent(this.markerLayer.extent())
 		}
 	}
@@ -407,15 +390,13 @@
 		var attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, tiles &copy; <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png" />';
 		
 		var layerDefaults = {
-			subdomains: '1234',
-			type: 'osm',
 			tilePath: 'http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.png',
 			styleId: 998,
 			attribution: attribution
 		};
 
 		this.layerOptions = merge_options(layerDefaults, options.layerOptions || {});
-    
+    this.markerLayer = options.markerLayer || new L.LayerGroup();
 		this.mapOptions = options.mapOptions || {};
 		this.bounds = new L.LatLngBounds();
 	};
@@ -424,6 +405,13 @@
 		initialize: function(element) {
 			if(typeof(this.map) === 'undefined') {
 				this.map = new L.Map('map', this.mapOptions);
+				console.log(this.layerOptions);
+				console.log({
+          attribution: 'Jolie McCullough, Albuquerque Journal | Imagery &copy; 2011 CloudMade',
+          key: '09cb1b5940994a2695239c8c775524ef',
+          styleId: 106670,
+          maxZoom: 18
+         });
 				this.tileLayer = new L.TileLayer(this.layerOptions['tilePath'], this.layerOptions).addTo(this.map);
 			}
 		},
@@ -456,10 +444,12 @@
 			for(var i = 0; i < points.length; i++) {
 				if(!points[i].isValid()) { continue; }
 				var marker = this.drawMarker(points[i]);
-				marker.addTo(this.map)
-				this.bounds.extend(marker.getLatLng());
+				marker.addTo(this.markerLayer);
+        this.bounds.extend(marker.getLatLng());
 				points[i].marker = marker;
 			};
+
+			this.markerLayer.addTo(this.map);
 
 			if(!this.mapOptions.zoom && !this.mapOptions.center) {
 			  this.map.fitBounds(this.bounds);			

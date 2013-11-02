@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head prefix="og: http://wcfcourier.com/app/special/tabletop_to_leaflet/index_cluster.html">
+<head>
+	<title>Interactive Map: 'Bad' on location</title>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+    <!-- Mobile meta tags-->
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="MobileOptimized" content="320"/>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta http-equiv="cleartype" content="on">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="http://www.abqjournal.com/maps/css/leaflet.css" />
+	<link rel="stylesheet" href="http://www.abqjournal.com/maps/cluster_addons/MarkerCluster.css" />
+	<link rel="stylesheet" href="http://www.abqjournal.com/maps/cluster_addons/MarkerCluster.Default.css" />
+	<!--[if lte IE 8]>
+		<link rel="stylesheet" href="http://www.abqjournal.com/maps/css/leaflet.ie.css" />
+		<link rel="stylesheet" href="http://www.abqjournal.com/maps/cluster_addons/MarkerCluster.Default.ie.css" />
+	<![endif]-->
+	<link rel="stylesheet" href="http://www.abqjournal.com/maps/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="http://www.abqjournal.com/maps/css/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" href="http://www.abqjournal.com/maps/css/style.css" />
+</head>
+<body>
+	<!-- Javascript -->
+	<script type="text/javascript" src="http://www.abqjournal.com/maps/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="http://www.abqjournal.com/maps/js/leaflet.js"></script>
+	<script type="text/javascript" src="http://www.abqjournal.com/maps/cluster_addons/leaflet.markercluster-src.js"></script>
+	<script type="text/javascript" src="common/tabletop.js"></script>
+	<script type="text/javascript" src="common/handlebars.js"></script>
+
+    <noscript>
+		<div id="noscript_note">
+			You must have JavaScript enabled to view this page.
+		</div>
+	</noscript>
+
+	<div id="sidebar">
+		<div class="sidebar_header">
+			<h3>'Bad' on location</h3>
+		</div>
+
+		<div class="sidebar_content">
+			<p>This interactive map shows areas in and around Albuqerque where "Breaking Bad" was filmed.</p>
+			<p>Click on a marker to see what scene took place there. Zoom out to see places that were in the show outside of Albuquerque.</p>
+			<p>The clusters (green circles) show how many markers are within that area. Click on one a cluster to zoom in on the markers in that area.</p>
+			<p>For more content, view the <a href="http://epaper.abqjournal.com/Olive/ODE/AJSPECIALS/Default.aspx?href=SPE/2013/10/29&PageNo=1">Breaking Bad" special section</a> that printed in the Albuquerque Journal on Tuesday, October 29.</p>
+			<!-- <p style="font-size:11px;">Having trouble seeing the content? Try logging in to your <a target="_blank" href="https://accounts.google.com/ServiceLogin?hl=en&continue=https://www.google.com/">Google account</a> and refreshing the page-- this is a temporary bug with Google.</p> -->
+    	</div>
+	</div>
+
+	<div class="description_box">
+		<div class="x_button toggle_description btn btn-primary" type="button">
+			<strong>X</strong>
+		</div>
+		<div class="description_box_header"></div>
+		<div class="description_box_content">
+			<div class="description_box_text"></div>
+			<div id="caption_box"></div>
+		</div>
+	</div>
+	<div class="description_box_cover"></div>
+
+	<div id="map"></div>
+
+  <script type="text/x-handlebars-template" id="popup-template">
+    <div class="popup_box">
+      <div class='popup_box_header'><strong><span style='color:red'>{{site}}</span> | {{name}}</strong></div>
+      <hr />
+      <img style='width: 150px; margin-right: 10px; float: left;' src='{{image}}' /><p>{{description}}</p>
+      </div><div style='clear:both'></div>
+    </div>
+  </script>
+
+	<script src="../src/mapsheet.js"></script>	
+	
+	<script>
+	$(document).ready( function() {  
+    var markers = new L.MarkerClusterGroup();
+    Mapsheet( { key: '0AjA5lxcZKkY5dHBSOUNsczhtc3M3UllmMVB1N3FqLUE',
+                element: "map",
+                popupTemplate: "popup-template",
+                provider: Mapsheet.Providers.Leaflet,
+                markerLayer: markers,
+                layerOptions: {
+                   tilePath: 'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png',
+                   styleId: 106670,
+                   key: '09cb1b5940994a2695239c8c775524ef',
+                   maxZoom: 18
+                },
+                mapOptions: {
+                    center: [35.13,-106.53],
+                    zoom: 12
+                },
+                callback: function(mapsheet) {
+                  if ($(window).width() < 641) {
+                    mapsheet.map().setView([35.1,-106.58],12);
+                  }
+                }
+    });
+  });
+	</script>
+</body>
+</html>

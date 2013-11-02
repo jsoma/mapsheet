@@ -1,10 +1,10 @@
 # **Mapsheet.js**
 
-**Mapsheet.js** makes an interactive map out of a Google Spreadsheet. It depends on [Tabletop.js](http://github.com/jsoma/tabletop) and whatever map provider you're using. It is also dead simple.
+**Mapsheet.js** makes an interactive map out of a Google Spreadsheet. It depends on [Tabletop.js](http://github.com/jsoma/tabletop) and whatever map provider you're using (supports Leaflet, Google Maps, Mapbox (the pre-Leaflet version!), and MapQuest).
 
-*Optional:* Mapsheet supports [Handlebars](http://handlebarsjs.com) for info window templates.
+It is also dead simple.
 
-**NOTE: Mapsheet is still under heavy development (if you can call it that).**
+*Optional but fun:* Mapsheet supports [Handlebars](http://handlebarsjs.com) for info window templates.
 
 ## So how do I do this?
 
@@ -27,7 +27,7 @@ and as long as you have a `<div id="map"></div>` somewhere you'll be good to go.
 
 #### Initialization options
 
-When you initialize Mapsheet you have plenty of options to pick through. `key` and `element` are the only two required parameters, though!
+When you initialize Mapsheet you have plenty of options to pick through. `key` and `element` are the only two required parameters, though! I've tried to note the ones that are provider-specific.
 
 `key` is the URL to the *published* Google Spreadsheet you're dealing with.
 
@@ -57,6 +57,10 @@ When you initialize Mapsheet you have plenty of options to pick through. `key` a
 `callback` is the callback for when the map has been successfully drawn. It will be passed two objects: the mapsheet object and the tabletop object. See [the Tabletop.js](http://github.com/jsoma/tabletop) docs if you'd like more info on that part.
 
 `callbackContext` provides the context of the callback, if necessary.
+
+`markerLayer` is the layer that you'd like to render your markers on **(not supported by Google)**
+
+`layerOptions` are options passed passed to the marker layer, e.g. you want a cool Cloudmade backdrop **(Leaflet only)**
 
 #### Methods/Properties
 
