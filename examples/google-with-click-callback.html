@@ -7,6 +7,8 @@
 				Google Maps
 				Handlebars templates for the popups
 		
+		  When a marker is clicked, we'll zoom in to the marker
+		    and showing a popup
 		-->
 		
     <div id="map" style="height: 500px; width: 600px"></div>
@@ -19,6 +21,7 @@
 
     <script id="popup-template" type="text/x-handlebars-template">
 			<h3>{{town}}</h3>
+			<p>{{lat}}, {{long}}</p>
 			<p>{{streetaddress}}</p>
     </script>
 
@@ -39,10 +42,10 @@
 											// attach some events or whatnot
 											callback: function(mapsheet, tabletop) {
 											  for(var i=0; i < mapsheet.points.length; i++) {
-											    var marker = mapsheet.points[i].marker;
                           google.maps.event.addListener(mapsheet.points[i].marker, 'click', function() {
+                            // 'this' is the marker
+                            mapsheet.map().setCenter(this.getPosition());
                             mapsheet.map().setZoom(12);
-                            mapsheet.map().setCenter(marker.getPosition());
                           })
 											  }
 											}
