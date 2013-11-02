@@ -90,13 +90,15 @@
 	<script>
 	$(document).ready( function() {  
     
-    var markers = new L.MarkerClusterGroup();
-    
     Mapsheet( { key: '0AjA5lxcZKkY5dHBSOUNsczhtc3M3UllmMVB1N3FqLUE',
                 element: "map",
+                  // The template for what comes up when you click a marker
                 popupTemplate: "popup-template",
                 provider: Mapsheet.Providers.Leaflet,
-                markerLayer: markers,
+                  // Instead of the default marker layer, we're going to use a
+                  // marker cluster group, which automatically clusters nearby markers
+                markerLayer: new L.MarkerClusterGroup(),
+                  // These options go to the layer (magic Leaflet stuff)
                 layerOptions: {
                    tilePath: 'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png',
                    styleId: 106670,
@@ -104,10 +106,12 @@
                    attribution: 'Jolie McCullough, Albuquerque Journal | Imagery &copy; 2011 CloudMade',
                    maxZoom: 18
                 },
+                  // Pass these options to the whole map
                 mapOptions: {
                     center: [35.13,-106.53],
                     zoom: 12
                 },
+                  // After the map has been drawn, we'll see if we should resize/recenter it
                 callback: function(mapsheet) {
                   if ($(window).width() < 641) {
                     mapsheet.map().setView([35.1,-106.58],12);
