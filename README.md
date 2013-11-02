@@ -33,7 +33,7 @@ When you initialize Mapsheet you have plenty of options to pick through. `key` a
 
 `element` is the id of the element that's going to become the map. You can also pass in an element.
 
-`click` is a callback for when a *marker* is clicked. **this** is the default **this**, the first parameter is the event and the second is the Mapsheet.Marker (check the examples!)
+`click` is a callback for when a *marker* is clicked. **this** is the default **this**, the first parameter is the event and the second is the Mapsheet.Point (check the examples!)
 
 `fields` is an array of columns to display in the info window if you don't feel like using a template. Check the examples!
 
@@ -62,9 +62,9 @@ When you initialize Mapsheet you have plenty of options to pick through. `key` a
 
 `.map()` is the rendered map
 
-`.points` is an array of Mapsheet.Marker objects
+`.points` is an array of Mapsheet.Point objects
 
-### Mapsheet.Marker
+### Mapsheet.Point
 
 #### Methods/Properties
 
