@@ -16,6 +16,7 @@
     }
 
     this.key = options.key;
+    this.click = options.click;
     this.passedMap = options.map;
     this.element = options.element;
 		this.sheetName = options.sheetName;
@@ -60,7 +61,7 @@
 			var elements = tabletop.sheets(this.sheetName).elements;
 		
 			for(var i = 0; i < elements.length; i++) {
-				var point = new Mapsheet.Point( { model: elements[i], fields: this.fields, popupContent: this.popupContent, popupTemplate: this.popupTemplate, markerOptions: this.markerOptions, titleColumn: this.titleColumn } );
+				var point = new Mapsheet.Point( { model: elements[i], fields: this.fields, popupContent: this.popupContent, popupTemplate: this.popupTemplate, markerOptions: this.markerOptions, titleColumn: this.titleColumn, click: this.click } );
 				this.points.push(point);
 			};
 		
@@ -96,9 +97,10 @@
 		this.popupTemplate = options.popupTemplate;
 		this.titleColumn = options.titleColumn;
 		this.markerOptions = options.markerOptions;
+		this.click = options.click
   };
 
-  Mapsheet.Point.prototype = {
+  Mapsheet.Point.prototype = {    
 		coords: function() {
 			return [ this.latitude(), this.longitude() ];
 		},
@@ -221,6 +223,12 @@
 			this.setMarkerIcon(marker);
 			this.initInfoWindow(marker);
 
+			if(point.click) {
+        google.maps.event.addListener(marker, 'click', function(e) {
+          point.click.call(this, e, point);
+        });
+			}
+
 			return marker;
 		},
 		
@@ -308,6 +316,12 @@
 			marker.setRolloverContent(point.title());
 			marker.setInfoContentHTML(point.content());
 
+      if(point.click) {
+        MQA.EventManager.addListener(marker, 'click', function(e) {
+          point.click.call(this, e, point);
+        });
+      }
+
 			return marker;
 		},
 
@@ -316,6 +330,7 @@
 				if(!points[i].isValid()) { continue; }
 				var marker = this.drawMarker(points[i]);
 			  this.map.addShape(marker);
+			  points[i].marker = marker;
 			};
 			this.map.bestFit();
 		}
@@ -354,6 +369,8 @@
 	      }
 			}
 			
+			// TODO Can't figure out how to attach click elements
+			
 			return marker;
 		},
 
@@ -368,6 +385,7 @@
 				if(!points[i].isValid()) { continue; }
 				var marker = this.drawMarker(points[i]);
 				this.markerLayer.add_feature(marker);
+				points[i].marker = marker;
 			};
 			this.map.setExtent(this.markerLayer.extent())
 		}
@@ -417,7 +435,12 @@
 				var icon = L.icon(point.markerOptions);
 				marker.setIcon(icon);
 			}
-				
+			
+			if(point.click) {
+			  marker.on('click', function(e) {
+          point.click.call(this, e, point);
+        });
+			}
 			// var icon = L.icon();
 			// marker.setIcon(icon);
 
@@ -428,8 +451,9 @@
 			for(var i = 0; i < points.length; i++) {
 				if(!points[i].isValid()) { continue; }
 				var marker = this.drawMarker(points[i]);
-				marker.addTo(this.map)				
+				marker.addTo(this.map)
 				this.bounds.extend(marker.getLatLng());
+				points[i].marker = marker;
 			};
 			this.map.fitBounds(this.bounds);			
 		}
