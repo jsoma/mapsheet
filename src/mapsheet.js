@@ -185,12 +185,12 @@
 		
 		setMarkerIcon: function(marker) {
 			if(typeof(marker.point.get('icon url')) !== 'undefined' && marker.point.get('icon url') !== '') {
-				marker.icon = marker.point.get('icon url');
+				marker.setIcon(marker.point.get('icon url'));
 				return;
 			};
 			
 			if(typeof(marker.point.markerOptions['iconUrl']) !== 'undefined' && marker.point.markerOptions['iconUrl'] !== '') {
-				marker.icon = marker.point.markerOptions['iconUrl'];
+				marker.setIcon( marker.point.markerOptions['iconUrl']);
 				return;
 			};
 
