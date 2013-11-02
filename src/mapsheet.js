@@ -64,7 +64,9 @@
     draw: function() {
       this.renderer.initialize(this.element);
       this.renderer.drawPoints(this.points);
-      this.callback.apply(this.callbackContext || this, [this, this.tabletop]);
+      if(this.callback) {
+        this.callback.apply(this.callbackContext || this, [this, this.tabletop]);
+      }
     },
 	
     log: function(msg) {
@@ -197,8 +199,8 @@
 	        new google.maps.Size(40, 37),
 	        new google.maps.Point(0, 0),
 	        new google.maps.Point(12, 35));	 
-	  	marker.shadow = pinShadow;
-			marker.icon = pinImage;
+	  	marker.setShadow(pinShadow);
+			marker.setIcon(pinImage);
 		},
 		
 		drawMarker: function(point) {
