@@ -286,7 +286,10 @@
 				this.bounds.extend(marker.position);
 				points[i].marker = marker;
 			};
-			this.map.fitBounds(this.bounds);
+			
+			if(!this.mapOptions.zoom && !this.mapOptions.center) {
+  			this.map.fitBounds(this.bounds);
+			}
 		}
 	}
 
@@ -403,7 +406,7 @@
 		
 		var attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, tiles &copy; <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png" />';
 		
-		var defaults = {
+		var layerDefaults = {
 			subdomains: '1234',
 			type: 'osm',
 			tilePath: 'http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.png',
@@ -411,15 +414,17 @@
 			attribution: attribution
 		};
 
-		this.mapOptions = merge_options(defaults, options.mapOptions || {});
+		this.layerOptions = merge_options(layerDefaults, options.layerOptions || {});
+    
+		this.mapOptions = options.mapOptions || {};
 		this.bounds = new L.LatLngBounds();
 	};
 
 	Mapsheet.Providers.Leaflet.prototype = {
 		initialize: function(element) {
 			if(typeof(this.map) === 'undefined') {
-				this.map = new L.Map('map').setView([51.505, -0.09], 13);
-				this.tileLayer = new L.TileLayer(this.mapOptions['tilePath'], this.mapOptions).addTo(this.map);
+				this.map = new L.Map('map', this.mapOptions);
+				this.tileLayer = new L.TileLayer(this.layerOptions['tilePath'], this.layerOptions).addTo(this.map);
 			}
 		},
 		
@@ -455,7 +460,10 @@
 				this.bounds.extend(marker.getLatLng());
 				points[i].marker = marker;
 			};
-			this.map.fitBounds(this.bounds);			
+
+			if(!this.mapOptions.zoom && !this.mapOptions.center) {
+			  this.map.fitBounds(this.bounds);			
+			}
 		}
 	}
 
