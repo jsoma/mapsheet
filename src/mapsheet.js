@@ -331,49 +331,58 @@
 	Mapsheet.Providers.MapBox = function(options) {
 		this.map = options.map;
 		this.mapOptions = merge_options({ mapId: 'examples.map-vyofok3q'}, options.mapOptions || {});
-		this.markerLayer = options.markerLayer || mapbox.markers.layer();
+		this.markerLayer = options.markerLayer || L.mapbox.markerLayer();
+		this.bounds = new L.LatLngBounds();
 	};
 
 	Mapsheet.Providers.MapBox.prototype = {
 		initialize: function(element) {
 			if(typeof(this.map) === 'undefined') {
-				this.map = mapbox.map( element );
-				this.map.addLayer(mapbox.layer().id(this.mapOptions['mapId'])); // add the base layer
-		    this.map.ui.zoomer.add();
-		    this.map.ui.zoombox.add();
+			  this.map = L.mapbox.map( element );
+        this.map.addLayer(L.mapbox.tileLayer(this.mapOptions['mapId'])); // add the base layer
+        // this.map.ui.zoomer.add();
+        // this.map.ui.zoombox.add();
 			}
 		},
 		
 		drawMarker: function(point) {
-			var marker = {
-				geometry: {
-	          coordinates: [point.longitude(), point.latitude()]
-	      },
-	      properties: {
-	          'marker-color': point.get('hexcolor'),
-	          title: point.title(),
-	          description: point.content()
-	      }
+			var marker = L.marker(point.coords())
+				.bindPopup(point.content())
+			
+			if(typeof(point.get('icon url')) !== 'undefined' && point.get('icon url') !== '') {
+				var options = merge_options( point.markerOptions, { iconUrl: point.get('icon url') } );
+				var icon = L.icon(options);
+				marker.setIcon(icon);
+			} else if(typeof(point.markerOptions['iconUrl']) !== 'undefined') {
+				var icon = L.icon(point.markerOptions);
+				marker.setIcon(icon);
 			}
 			
-			// TODO Can't figure out how to attach click elements
-			
+			if(point.click) {
+			  marker.on('click', function(e) {
+          point.click.call(this, e, point);
+        });
+			}
+			// var icon = L.icon();
+			// marker.setIcon(icon);
+
 			return marker;
 		},
 
 		drawPoints: function(points) {
-      mapbox.markers.interaction(this.markerLayer);
-
-		  this.map.zoom(5).center({ lat: 37, lon: -77 });
-
 			for(var i = 0; i < points.length; i++) {
 				if(!points[i].isValid()) { continue; }
 				var marker = this.drawMarker(points[i]);
-				this.markerLayer.add_feature(marker);
+				marker.addTo(this.markerLayer);
+        this.bounds.extend(marker.getLatLng());
 				points[i].marker = marker;
 			};
-		  this.map.addLayer(this.markerLayer);
-			this.map.setExtent(this.markerLayer.extent())
+
+			this.markerLayer.addTo(this.map);
+console.log(this.markerLayer);
+			if(!this.mapOptions.zoom && !this.mapOptions.center) {
+			  this.map.fitBounds(this.bounds);
+			}
 		}
 	}
 
