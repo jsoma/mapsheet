@@ -1,8 +1,8 @@
 # **Mapsheet.js**
 
-**Mapsheet.js** makes an interactive map out of a Google Spreadsheet. It depends on [Tabletop.js](http://github.com/jsoma/tabletop) and whatever map provider you're using (supports Leaflet, Google Maps, Mapbox (the pre-Leaflet version!), and MapQuest).
+**Mapsheet.js** makes an interactive map out of a Google Spreadsheet. It depends on [Tabletop.js](http://github.com/jsoma/tabletop) and whatever map provider you're using (supports [Leaflet](http://leafletjs.com), [Google Maps](https://maps.google.com), [Mapbox](https://www.mapbox.com) (which is basically Leaflet!), and [MapQuest](http://developer.mapquest.com)).
 
-It is also dead simple.
+It is also **dead simple**.
 
 *Optional but fun:* Mapsheet supports [Handlebars](http://handlebarsjs.com) for info window templates.
 
