@@ -35,7 +35,8 @@ A pretty full-fledged example might be: let's say you have some restaurants you'
       }
     </style>
 
-    <!-- This is the popup you'll get when you click a marker. {{these}} are columns in your spreadsheet -->
+    <!-- This is the popup you'll get when you click a marker. 
+         {{these}} are columns in your spreadsheet -->
     <script id="popup-template" type="text/x-handlebars-template">
       <img src="{{image}}">
       <h3>{{name}}</h3>
