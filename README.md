@@ -106,6 +106,8 @@ When you initialize Mapsheet you have plenty of options to pick through. `key` a
 
 `callbackContext` provides the context of the callback, if necessary.
 
+`proxy` passes right through to Tabletop.
+
 `markerLayer` is the layer that you'd like to render your markers on **(not supported by Google)**
 
 `layerOptions` are options passed passed to the marker layer if you want a custom backing map, or specify attribution, etc **(Leaflet only)**
