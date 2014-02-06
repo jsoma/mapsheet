@@ -2,43 +2,40 @@
   "use strict";
 
   var inNodeJS = false;
-  if (typeof process !== 'undefined') {
+  if (typeof module !== 'undefined' && module.exports) {
     inNodeJS = true;
     var request = require('request');
   }
 
-  // from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
-  if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function (searchElement, fromIndex) {
-      if (this == null) {
-        throw new TypeError();
+  var supportsCORS = false;
+  var inLegacyIE = false;
+  try {
+    var testXHR = new XMLHttpRequest();
+    if (typeof testXHR.withCredentials !== 'undefined') {
+      supportsCORS = true;
+    } else {
+      if ("XDomainRequest" in window) {
+        supportsCORS = true;
+        inLegacyIE = true;
       }
-      var t = Object(this);
-      var len = t.length >>> 0;
-      if (len === 0) {
-        return -1;
-      }
-      var n = 0;
-      if (arguments.length > 1) {
-        n = Number(arguments[1]);
-        if (n != n) { // shortcut for verifying if it's NaN
-          n = 0;
-        } else if (n != 0 && n != Infinity && n != -Infinity) {
-          n = (n > 0 || -1) * Math.floor(Math.abs(n));
-        }
-      }
-      if (n >= len) {
-        return -1;
-      }
-      var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
-      for (; k < len; k++) {
-        if (k in t && t[k] === searchElement) {
-          return k;
-        }
-      }
-      return -1;
     }
-  }
+  } catch (e) { }
+
+  // Create a simple indexOf function for support
+  // of older browsers.  Uses native indexOf if 
+  // available.  Code similar to underscores.
+  // By making a separate function, instead of adding
+  // to the prototype, we will not break bad for loops
+  // in older browsers
+  var indexOfProto = Array.prototype.indexOf;
+  var ttIndexOf = function(array, item) {
+    var i = 0, l = array.length;
+    
+    if (indexOfProto && array.indexOf === indexOfProto) return array.indexOf(item);
+    for (; i < l; i++) if (array[i] === item) return i;
+    return -1;
+  };
+  
   /*
     Initialize with Tabletop.init( { key: '0AjAPaAU9MeLFdHUxTlJiVVRYNGRJQnRmSnQwTlpoUXc' } )
       OR!
@@ -77,6 +74,9 @@
       this.endpoint = options.proxy;
       this.simple_url = true;
       this.singleton = true;
+      // Let's only use CORS (straight JSON request) when
+      // fetching straight from Google
+      supportsCORS = false
     }
     
     this.parameterize = options.parameterize || false;
@@ -106,7 +106,7 @@
 
     this.base_json_path = "/feeds/worksheets/" + this.key + "/public/basic?alt=";
 
-    if (inNodeJS) {
+    if (inNodeJS || supportsCORS) {
       this.base_json_path += 'json';
     } else {
       this.base_json_path += 'json-in-script';
@@ -147,8 +147,34 @@
       if (inNodeJS) {
         this.serverSideFetch(path, callback);
       } else {
-        this.injectScript(path, callback);
+        //CORS only works in IE8/9 across the same protocol
+        //You must have your server on HTTPS to talk to Google, or it'll fall back on injection
+        var protocol = this.endpoint.split("//").shift() || "http";
+        if (supportsCORS && (!inLegacyIE || protocol === location.protocol)) {
+          this.xhrFetch(path, callback);
+        } else {
+          this.injectScript(path, callback);
+        }
       }
+    },
+
+    /*
+      Use Cross-Origin XMLHttpRequest to get the data in browsers that support it.
+    */
+    xhrFetch: function(path, callback) {
+      //support IE8's separate cross-domain object
+      var xhr = inLegacyIE ? new XDomainRequest() : new XMLHttpRequest();
+      xhr.open("GET", this.endpoint + path);
+      var self = this;
+      xhr.onload = function() {
+        try {
+          var json = JSON.parse(xhr.responseText);
+        } catch (e) {
+          console.error(e);
+        }
+        callback.call(self, json);
+      };
+      xhr.send();
     },
     
     /*
@@ -225,7 +251,7 @@
       if(this.wanted.length === 0) {
         return true;
       } else {
-        return this.wanted.indexOf(sheetName) !== -1;
+        return (ttIndexOf(this.wanted, sheetName) !== -1);
       }
     },
     
@@ -254,7 +280,7 @@
       Add another sheet to the wanted list
     */
     addWanted: function(sheet) {
-      if(this.wanted.indexOf(sheet) === -1) {
+      if(ttIndexOf(this.wanted, sheet) === -1) {
         this.wanted.push(sheet);
       }
     },
@@ -278,7 +304,7 @@
         if( this.isWanted(data.feed.entry[i].content.$t) ) {
           var sheet_id = data.feed.entry[i].link[3].href.substr( data.feed.entry[i].link[3].href.length - 3, 3);
           var json_path = "/feeds/list/" + this.key + "/" + sheet_id + "/public/values?sq=" + this.query + '&alt='
-          if (inNodeJS) {
+          if (inNodeJS || supportsCORS) {
             json_path += 'json';
           } else {
             json_path += 'json-in-script';
@@ -328,7 +354,7 @@
                                     postProcess: this.postProcess,
                                     tabletop: this } );
       this.models[ model.name ] = model;
-      if(this.model_names.indexOf(model.name) === -1) {
+      if(ttIndexOf(this.model_names, model.name) === -1) {
         this.model_names.push(model.name);
       }
       this.sheetsToLoad--;
