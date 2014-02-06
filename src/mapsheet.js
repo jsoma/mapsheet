@@ -379,7 +379,7 @@
 			};
 
 			this.markerLayer.addTo(this.map);
-console.log(this.markerLayer);
+
 			if(!this.mapOptions.zoom && !this.mapOptions.center) {
 			  this.map.fitBounds(this.bounds);
 			}
