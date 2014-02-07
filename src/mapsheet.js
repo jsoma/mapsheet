@@ -45,7 +45,7 @@
 			this.element = document.getElementById(this.element);
 		};
 
-		this.tabletop = new Tabletop( { key: this.key, callback: this.loadPoints, callbackContext: this, simpleSheet: simpleSheet, proxy: options.proxy } );
+		this.tabletop = new Tabletop( { key: this.key, callback: this.loadPoints, callbackContext: this, simpleSheet: simpleSheet, proxy: options.proxy, endpoint: options.endpoint } );
   };
 
 
