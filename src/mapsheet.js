@@ -200,19 +200,21 @@
 				return;
 			};
 
-			var pinColor = marker.point.get('hexcolor') || "FE7569";
-			pinColor = pinColor.replace('#','');
-			
-	    var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|" + pinColor,
-	        new google.maps.Size(21, 34),
-	        new google.maps.Point(0,0),
-	        new google.maps.Point(10, 34));
-	    var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-	        new google.maps.Size(40, 37),
-	        new google.maps.Point(0, 0),
-	        new google.maps.Point(12, 35));	 
-	  	marker.setShadow(pinShadow);
-			marker.setIcon(pinImage);
+			if( typeof( marker.point.get('hexcolor') ) !== 'undefined' ) {
+				var pinColor = marker.point.get('hexcolor') || "FE7569";
+				pinColor = pinColor.replace('#','');
+				
+				var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|" + pinColor,
+					new google.maps.Size(21, 34),
+					new google.maps.Point(0,0),
+					new google.maps.Point(10, 34));
+				var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+					new google.maps.Size(40, 37),
+					new google.maps.Point(0, 0),
+					new google.maps.Point(12, 35));	 
+			  	marker.setShadow(pinShadow);
+					marker.setIcon(pinImage);
+			}
 		},
 		
 		drawMarker: function(point) {
